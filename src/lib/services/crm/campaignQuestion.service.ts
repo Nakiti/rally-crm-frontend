@@ -12,7 +12,7 @@ import type {
  */
 export const getCampaignQuestions = async (campaignId: string): Promise<CampaignQuestion[]> => {
   const response = await apiClient.get(`/crm/campaigns/${campaignId}/questions`);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -26,7 +26,7 @@ export const createCampaignQuestion = async (
   data: CreateCampaignQuestionData
 ): Promise<CampaignQuestion> => {
   const response = await apiClient.post(`/crm/campaigns/${campaignId}/questions`, data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -42,7 +42,7 @@ export const updateCampaignQuestion = async (
   data: UpdateCampaignQuestionData
 ): Promise<CampaignQuestion> => {
   const response = await apiClient.put(`/crm/campaigns/${campaignId}/questions/${questionId}`, data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -56,6 +56,6 @@ export const deleteCampaignQuestion = async (
   questionId: string
 ): Promise<CampaignQuestion> => {
   const response = await apiClient.delete(`/crm/campaigns/${campaignId}/questions/${questionId}`);
-  return response.data;
+  return response.data.data;
 };
 

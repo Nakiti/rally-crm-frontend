@@ -12,7 +12,7 @@ import type {
  */
 export const getPublicCampaign = async (slug: string): Promise<PublicCampaign> => {
   const response = await apiClient.get(`/public/campaigns/${slug}`);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -26,6 +26,6 @@ export const createDonation = async (
   data: CreateDonationData
 ): Promise<CreateDonationResponse> => {
   const response = await apiClient.post(`/public/campaigns/${slug}/donations`, data);
-  return response.data;
+  return response.data.data;
 };
 

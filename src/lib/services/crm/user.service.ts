@@ -7,6 +7,6 @@ import type { CurrentUser } from "@/lib/types";
  */
 export const getCurrentUser = async (): Promise<CurrentUser> => {
   const response = await apiClient.get('/crm/me');
-  return response.data;
+  return response.data.data;
 };
 

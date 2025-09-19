@@ -26,20 +26,25 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const { data: currentUserData, isLoading, isError, refetch } = useGetCurrentUser();
 
   // Effect to handle session restoration on app load
-  useEffect(() => {
-    if (!isInitialized) {
-      // If we have current user data, restore the session
-      if (currentUserData && typeof currentUserData === 'object' && 'data' in currentUserData && currentUserData.data) {
+useEffect(() => {
+  // Only run this logic once on initialization
+  if (!isInitialized) {
+    // If the hook has finished loading...
+    if (!isLoading) {
+      // And we successfully got user data, set the session.
+      if (currentUserData?.data && !isError) {
         setSession(currentUserData.data);
         setUserType('staff');
-      } else if (isError || !isLoading) {
-        // If there's an error (like 401) or we're done loading with no data, clear the session
+      } else {
+        // Otherwise (error or no data), ensure the session is cleared.
         setSession(null);
         setUserType(null);
       }
+      // Mark initialization as complete
       setIsInitialized(true);
     }
-  }, [currentUserData, isError, isLoading, isInitialized]);
+  }
+}, [isInitialized, isLoading, currentUserData, isError]);
 
   // --- Login & Logout Functions ---
 

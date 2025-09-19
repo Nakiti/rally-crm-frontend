@@ -4,7 +4,7 @@ import { Header } from '@/components/crm/Header';
 import { Sidebar, SidebarItem } from '@/components/ui';
 import { BarChart3, Target, Calendar, DollarSign, Globe, Settings, User } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function CRMLayout({
@@ -14,6 +14,10 @@ export default function CRMLayout({
 }) {
   const { session, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Check if we're on an editor route
+  const isEditorRoute = pathname.includes('/editor');
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -62,17 +66,19 @@ export default function CRMLayout({
       {/* Header */}
       <Header user={user} />
       
-      {/* Main Content Area with Sidebar */}
+      {/* Main Content Area */}
       <div className="flex flex-1 min-h-0">
-        {/* Sidebar */}
-        <Sidebar 
-          items={sidebarItems} 
-          className="h-full"
-        />
+        {/* Sidebar - only show if not on editor route */}
+        {!isEditorRoute && (
+          <Sidebar 
+            items={sidebarItems} 
+            className="h-full"
+          />
+        )}
         
         {/* Main Content */}
-        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-8 overflow-auto">
-          <div className="max-w-7xl mx-auto">
+        <main className={`flex-1 overflow-auto ${isEditorRoute ? 'w-full' : ''}`}>
+          <div className={isEditorRoute ? 'w-full' : 'max-w-7xl mx-auto'}>
             {children}
           </div>
         </main>

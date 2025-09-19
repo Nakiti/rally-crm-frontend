@@ -2,6 +2,8 @@
 import { useState, useContext } from 'react';
 import { X } from "lucide-react";
 import { useRouter } from 'next/navigation';
+import { useCreateCampaign } from '@/hooks/crm/useCampaign';
+import { useGetDesignations } from '@/hooks/crm/useDesignation';
 
 /*
    Component: Modal
@@ -19,9 +21,9 @@ const Modal = ({setShow, organizationId}: ModalProps) => {
    const [activeTab, setActiveTab] = useState(0);
    const router = useRouter();
    const [internalName, setInternalName] = useState("");
-   const [error, setError] = useState(false);
-   const [errorMessage, setErrorMessage] = useState("");
-   const [isLoading, setIsLoading] = useState(false);
+   const [validationError, setValidationError] = useState("");
+   const {mutate, isPending: isLoading, isError, error } = useCreateCampaign();
+   const { data: designations } = useGetDesignations();
 
    const tabContent = [
       // { title: 'Donation Form', content: 'donation' },
@@ -30,55 +32,60 @@ const Modal = ({setShow, organizationId}: ModalProps) => {
       // { title: 'Ticketed Event', content: 'ticketed-event' },
    ];
 
-   /*
-      Description: Depending on the type of campaign that is created, pages corresponding to that campaign
-                  type are created
-                  Donation Form and Thank You Page are created for all campaign Types
-   */
-   /*
-      Currently page sections are created but not used. They are created to potentially give the user to
-      enable and disable components of the display
-   */
-      const handleClick = async () => {
-      if (internalName === "") {
-         setError(true)
-         return
+   const handleClick = async () => {
+      // Clear previous validation errors
+      setValidationError("");
+      
+      // Validate required fields
+      if (!internalName.trim()) {
+         setValidationError("Internal Campaign Name is required");
+         return;
       }
-      setError(false)
-      setIsLoading(true)
 
-      console.log("tabContent[activeTab].content ", tabContent[activeTab].content)
+      console.log(designations)
 
-      try {
-           // TODO: Implement campaign creation logic
-           // This is a placeholder implementation
-           console.log("Creating campaign:", {
-              organizationId,
-              type: tabContent[activeTab].content,
-              internalName
-           });
-           
-           // Simulate API call
-           await new Promise(resolve => setTimeout(resolve, 2000));
-           
-           // For now, just redirect to campaigns page
-           router.push(`/campaigns`);
-      } catch (err) {
-         setErrorMessage("Failed to create campaign. Please try again.");
-         setError(true)
-      } finally {
-         setIsLoading(false)
+      // Check if we have designations available
+      if (!designations || designations.length === 0) {
+         setValidationError("No designations available. Please create a designation first.");
+         return;
       }
+
+      // Get the first available designation as default
+      const defaultDesignation = designations[0];
+      
+      // Prepare campaign data based on the selected tab
+      const campaignData = {
+         defaultDesignationId: defaultDesignation.id,
+         internalName: internalName.trim(),
+         externalName: internalName.trim(), // Use internal name as external name for now
+         title: internalName.trim(), // Use internal name as title for now
+         goalAmount: 10000, // Default goal amount, can be made configurable later
+         isActive: false // Start as inactive, user can activate later
+      };
+
+      // Create the campaign
+      mutate(campaignData, {
+         onSuccess: (newCampaign) => {
+            setShow(false);
+            router.push(`/campaigns/${newCampaign.id}`);
+         },
+         onError: (error) => {
+            console.error('Failed to create campaign:', error);
+         }
+      });
    };
 
    return (
-      <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex flex-col items-center justify-center z-50">
-         {error && (
+      <div className="fixed inset-0 bg-opacity-10 flex flex-col items-center justify-center z-50">
+         {(error || validationError) && (
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
                <h3 className="text-lg font-semibold text-red-600 mb-2">Error</h3>
-               <p className="text-gray-700 mb-4">{errorMessage}</p>
+               <p className="text-gray-700 mb-4">{validationError || error?.message || 'An error occurred'}</p>
                <button 
-                  onClick={() => setError(false)}
+                  onClick={() => {
+                     setValidationError("");
+                     // Note: We can't directly clear the mutation error, it will clear on next attempt
+                  }}
                   className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                >
                   Close
@@ -142,12 +149,18 @@ const Modal = ({setShow, organizationId}: ModalProps) => {
                      type="text"
                      placeholder="Enter Internal Campaign Name"
                      className={`p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out ${
-                        error ? 'border-red-500' : 'border-gray-300'
+                        validationError ? 'border-red-500' : 'border-gray-300'
                      }`}
                      value={internalName}
-                     onChange={(e) => setInternalName(e.target.value)}
+                     onChange={(e) => {
+                        setInternalName(e.target.value);
+                        // Clear validation error when user starts typing
+                        if (validationError) {
+                           setValidationError("");
+                        }
+                     }}
                   />
-                  {error && <p className="text-red-500 text-sm mt-1">This field is required.</p>}
+                  {validationError && <p className="text-red-500 text-sm mt-1">{validationError}</p>}
                </div>
                                <div className="mt-auto flex justify-center">
                    <button 

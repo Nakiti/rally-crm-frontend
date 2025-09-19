@@ -12,7 +12,7 @@ import type {
  */
 export const createOrganization = async (data: CreateOrganizationData): Promise<Organization> => {
   const response = await apiClient.post('/crm/organizations', data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -22,7 +22,7 @@ export const createOrganization = async (data: CreateOrganizationData): Promise<
  */
 export const getOrganization = async (id: string): Promise<Organization> => {
   const response = await apiClient.get(`/crm/organizations/${id}`);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -33,7 +33,7 @@ export const getOrganization = async (id: string): Promise<Organization> => {
  */
 export const updateOrganization = async (id: string, data: UpdateOrganizationData): Promise<Organization> => {
   const response = await apiClient.put(`/crm/organizations/${id}`, data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -43,6 +43,6 @@ export const updateOrganization = async (id: string, data: UpdateOrganizationDat
  */
 export const deleteOrganization = async (id: string): Promise<Organization> => {
   const response = await apiClient.delete(`/crm/organizations/${id}`);
-  return response.data;
+  return response.data.data;
 };
 

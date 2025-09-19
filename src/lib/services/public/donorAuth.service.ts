@@ -12,7 +12,7 @@ import type {
  */
 export const signUp = async (data: DonorRegistrationData): Promise<DonorAuthResponse> => {
   const response = await apiClient.post('/public/donor-auth/signup', data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -22,6 +22,6 @@ export const signUp = async (data: DonorRegistrationData): Promise<DonorAuthResp
  */
 export const logIn = async (data: DonorLoginCredentials): Promise<DonorAuthResponse> => {
   const response = await apiClient.post('/public/donor-auth/login', data);
-  return response.data;
+  return response.data.data;
 };
 

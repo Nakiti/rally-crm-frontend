@@ -1,40 +1,21 @@
-import apiClient from "@/lib/apiClient";
-import type { 
-  Donation, 
-  DonationFilters, 
-  DonationsResponse 
-} from "@/lib/types";
+import type { Donation, DonationsResponse, DonationFilters } from "@/lib/types";
+import apiClient from "../../apiClient"
 
 /**
- * Fetches all donations for the organization with optional filtering and pagination.
- * @param filters - Optional filters and pagination parameters.
- * @returns Paginated donations response.
+ * Fetches the list of all donations for the organization.
+ * The apiClient is configured to automatically send the Staff JWT.
  */
 export const getDonations = async (filters?: DonationFilters): Promise<DonationsResponse> => {
-  const params = new URLSearchParams();
-  
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        params.append(key, value.toString());
-      }
-    });
-  }
-  
-  const queryString = params.toString();
-  const url = queryString ? `/crm/donations?${queryString}` : '/crm/donations';
-  
-  const response = await apiClient.get(url);
-  return response.data;
+    const response = await apiClient.get('/crm/donations', { params: filters });
+    return response.data.data; // Backend wraps in { success: true, data: result }
 };
 
 /**
- * Fetches detailed information about a specific donation.
+ * Fetches a single donation by its ID.
  * @param id - The ID of the donation to fetch.
- * @returns The donation with all associated data.
+ * @returns The donation.
  */
-export const getDonationDetails = async (id: string): Promise<Donation> => {
-  const response = await apiClient.get(`/crm/donations/${id}`);
-  return response.data;
+export const getDonationById = async (id: string): Promise<Donation> => {
+    const response = await apiClient.get(`/crm/donations/${id}`);
+    return response.data.data; // Backend wraps in { success: true, data: result }
 };
-

@@ -11,7 +11,7 @@ import type {
  */
 export const getStaffForOrganization = async (): Promise<StaffMember[]> => {
   const response = await apiClient.get('/crm/staff');
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -21,7 +21,7 @@ export const getStaffForOrganization = async (): Promise<StaffMember[]> => {
  */
 export const inviteStaffMember = async (data: InviteStaffData): Promise<StaffMember> => {
   const response = await apiClient.post('/crm/staff/invite', data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -32,7 +32,7 @@ export const inviteStaffMember = async (data: InviteStaffData): Promise<StaffMem
  */
 export const updateStaffRole = async (staffAccountId: string, data: UpdateStaffRoleData): Promise<StaffMember> => {
   const response = await apiClient.patch(`/crm/staff/${staffAccountId}`, data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -42,6 +42,6 @@ export const updateStaffRole = async (staffAccountId: string, data: UpdateStaffR
  */
 export const removeStaffFromOrganization = async (staffAccountId: string): Promise<StaffMember> => {
   const response = await apiClient.delete(`/crm/staff/${staffAccountId}`);
-  return response.data;
+  return response.data.data;
 };
 

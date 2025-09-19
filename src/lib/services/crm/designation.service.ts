@@ -11,7 +11,7 @@ import type {
  */
 export const getDesignations = async (): Promise<Designation[]> => {
   const response = await apiClient.get('/crm/designations');
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -21,7 +21,7 @@ export const getDesignations = async (): Promise<Designation[]> => {
  */
 export const createDesignation = async (data: CreateDesignationData): Promise<Designation> => {
   const response = await apiClient.post('/crm/designations', data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -32,7 +32,7 @@ export const createDesignation = async (data: CreateDesignationData): Promise<De
  */
 export const updateDesignation = async (id: string, data: UpdateDesignationData): Promise<Designation> => {
   const response = await apiClient.put(`/crm/designations/${id}`, data);
-  return response.data;
+  return response.data.data;
 };
 
 /**
@@ -42,6 +42,6 @@ export const updateDesignation = async (id: string, data: UpdateDesignationData)
  */
 export const archiveDesignation = async (id: string): Promise<Designation> => {
   const response = await apiClient.patch(`/crm/designations/${id}/archive`);
-  return response.data;
+  return response.data.data;
 };
 

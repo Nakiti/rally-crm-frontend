@@ -13,3 +13,6 @@ export * from "./public/campaign.types.js"; // Public campaign types
 export * from "./public/donor.types.js"; // Public donor types - donation history
 export * from "./public/donorAuth.types.js"; // Public donor auth types - signup/login
 export * from "./public/organization.types.js"; // Public organization types
+
+// Settings Types
+export * from "./settings.types.js";

@@ -7,6 +7,6 @@ import type { PublicDonation } from "@/lib/types";
  */
 export const getDonationHistory = async (): Promise<PublicDonation[]> => {
   const response = await apiClient.get('/public/donor/history');
-  return response.data;
+  return response.data.data;
 };
 
