@@ -148,3 +148,21 @@ export const useUpdateCampaignQuestions = (id: string) => {
       },
     });
 };
+
+/**
+ * A mutation hook for updating a campaign's settings.
+ */
+export const useUpdateCampaignSettings = (id: string) => {
+    const queryClient = useQueryClient();
+  
+    return useMutation({
+      mutationFn: (data: import("@/lib/types").CampaignSettings) => 
+        campaignService.updateCampaignSettings(id, data),
+      onSuccess: (updatedCampaign) => {
+        // Update the campaign data in the cache
+        queryClient.setQueryData(['crm', 'campaigns', id], updatedCampaign);
+        // Also invalidate the campaigns list
+        queryClient.invalidateQueries({ queryKey: ['crm', 'campaigns'] });
+      },
+    });
+};

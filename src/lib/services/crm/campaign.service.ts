@@ -1,4 +1,4 @@
-import type { Campaign, CreateCampaignData, UpdateCampaignData, UpdatePageConfigData, UpdateCampaignDesignationsData, UpdateCampaignDesignationsResponse, UpdateCampaignQuestionsData, UpdateCampaignQuestionsResponse } from "@/lib/types";
+import type { Campaign, CreateCampaignData, UpdateCampaignData, UpdatePageConfigData, UpdateCampaignDesignationsData, UpdateCampaignDesignationsResponse, UpdateCampaignQuestionsData, UpdateCampaignQuestionsResponse, CampaignSettings } from "@/lib/types";
 import apiClient from "../../apiClient"
 
 /**
@@ -92,5 +92,16 @@ export const getCampaignByIdWithQuestions = async (id: string): Promise<Campaign
  */
 export const updateCampaignQuestions = async (id: string, data: UpdateCampaignQuestionsData): Promise<UpdateCampaignQuestionsResponse> => {
     const response = await apiClient.patch(`/crm/campaigns/${id}/questions`, data);
+    return response.data.data;
+};
+
+/**
+ * Updates the settings for a specific campaign.
+ * @param id - The ID of the campaign to update.
+ * @param data - The settings data to update.
+ * @returns The updated campaign.
+ */
+export const updateCampaignSettings = async (id: string, data: CampaignSettings): Promise<Campaign> => {
+    const response = await apiClient.patch(`/crm/campaigns/${id}/settings`, data);
     return response.data.data;
 };

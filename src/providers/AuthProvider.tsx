@@ -20,40 +20,33 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<StaffSession | DonorSession | null>(null);
   const [userType, setUserType] = useState<'staff' | 'donor' | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
   
   // Use the getCurrentUser hook to check for existing session
-  const { data: currentUserData, isLoading, isError, refetch } = useGetCurrentUser();
+  const { data: currentUserData, isLoading, isError } = useGetCurrentUser();
 
   // Effect to handle session restoration on app load
-useEffect(() => {
-  // Only run this logic once on initialization
-  if (!isInitialized) {
-    // If the hook has finished loading...
-    if (!isLoading) {
-      // And we successfully got user data, set the session.
-      if (currentUserData?.data && !isError) {
-        setSession(currentUserData.data);
-        setUserType('staff');
-      } else {
-        // Otherwise (error or no data), ensure the session is cleared.
-        setSession(null);
-        setUserType(null);
-      }
-      // Mark initialization as complete
-      setIsInitialized(true);
+  useEffect(() => {
+    if (isLoading) {
+      return;
     }
-  }
-}, [isInitialized, isLoading, currentUserData, isError]);
+
+    if (currentUserData && !isError) {
+      setSession(currentUserData);
+      setUserType('staff'); // Note: This is hardcoded
+    } else {
+
+      console.log("error", isError)
+      setSession(null);
+      setUserType(null);
+    }
+  }, [currentUserData, isError, isLoading]);
 
   // --- Login & Logout Functions ---
 
   const login = useCallback((user: StaffSession) => {
     setSession(user);
     setUserType("staff");
-    // Refetch current user data to ensure consistency
-    // refetch();
-  }, [refetch]);
+  }, []);
 
   const logout = useCallback(() => {
     // Clear the session state
@@ -64,11 +57,12 @@ useEffect(() => {
     window.location.href = '/login';
   }, []);
 
-  const isAuthenticated = !!session && isInitialized;
+  // User is authenticated if they have a session
+  const isAuthenticated = !!session;
 
   const value = { 
     session, 
-    isLoading: isLoading || !isInitialized, 
+    isLoading, 
     login, 
     logout, 
     isAuthenticated, 

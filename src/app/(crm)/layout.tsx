@@ -57,7 +57,7 @@ export default function CRMLayout({
     { name: 'Events', href: '/events', icon: <Calendar className="w-5 h-5" /> },
     { name: 'Transactions', href: '/transactions', icon: <DollarSign className="w-5 h-5" /> },
     { name: 'Website', href: '/website', icon: <Globe className="w-5 h-5" /> },
-    { name: 'Profile', href: '/profile', icon: <User className="w-5 h-5" /> },
+    // { name: 'Profile', href: '/profile', icon: <User className="w-5 h-5" /> },
     { name: 'Settings', href: '/settings', icon: <Settings className="w-5 h-5" /> },
   ];
 

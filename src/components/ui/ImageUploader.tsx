@@ -56,32 +56,31 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, currentImag
   const isLoading = generateSasUrlMutation.isPending;
 
   return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <div className="mt-1 flex items-center space-x-4">
-        {currentImageUrl ? (
-          <div className="relative">
-            <img src={currentImageUrl} alt="Current image" className="h-24 w-24 rounded-md object-cover" />
-            {onRemove && (
-              <button
-                type="button"
-                onClick={onRemove}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-              >
-                <X size={16} />
-              </button>
-            )}
-          </div>
-        ) : (
-          <div
+    <div className="mb-6">
+      <p className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+        {label} <span className="text-red-500 ml-1">*</span>
+      </p>
+      
+      {currentImageUrl ? (
+        <div className="relative w-full h-24 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 overflow-hidden">
+          <img src={currentImageUrl} alt="Current image" className="h-full w-full object-cover rounded-lg" />
+          {onRemove && (
+            <button
+              type="button"
+              onClick={onRemove}
+              className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200"
+            >
+              <X size={16} />
+            </button>
+          )}
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 cursor-pointer flex items-center justify-center"
             onClick={() => fileInputRef.current?.click()}
-            className="h-24 w-24 flex items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-50 text-gray-400 hover:border-blue-500 hover:bg-blue-50 cursor-pointer"
           >
-            <UploadCloud size={32} />
+            <div className="opacity-0 hover:opacity-100 transition-opacity duration-200 bg-white bg-opacity-90 rounded-full p-2">
+              <UploadCloud size={20} className="text-gray-600" />
+            </div>
           </div>
-        )}
-
-        <div>
           <input
             type="file"
             ref={fileInputRef}
@@ -90,17 +89,31 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, currentImag
             accept="image/png, image/jpeg, image/gif"
             disabled={isLoading}
           />
-          <Button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isLoading}
-            loading={isLoading}
-          >
-            {currentImageUrl ? 'Change Image' : 'Upload Image'}
-          </Button>
-          {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
         </div>
-      </div>
+      ) : (
+        <label className="group relative w-full h-24 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 hover:border-blue-400 transition-all duration-200 cursor-pointer overflow-hidden">
+          <div className="flex flex-col items-center justify-center text-center p-4">
+            <svg className="w-8 h-8 text-gray-400 group-hover:text-blue-500 transition-colors duration-200 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <span className="text-sm text-gray-600 group-hover:text-gray-700 font-medium">Click to upload an image</span>
+            <span className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 10MB</span>
+          </div>
+          <input 
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+            className="hidden" 
+            accept="image/png, image/jpeg, image/gif"
+            disabled={isLoading}
+          />
+        </label>
+      )}
+      
+      {isLoading && (
+        <div className="mt-2 text-sm text-gray-500">Uploading...</div>
+      )}
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );
 }

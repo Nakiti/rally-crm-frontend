@@ -18,12 +18,14 @@ const CampaignHeader: React.FC<CampaignHeaderProps> = ({
     <div className="flex items-center">
       <CampaignIcon campaignType={campaignType} />
       <div className="flex flex-col text-gray-100">
-        <p className="text-xs font-semibold">{"Edit Campaign"}</p>
-        <h1 className="text-2xl font-semibold">
-          {campaignDetails?.internalName || "Internal Campaign Name"}
+        <p className="text-xs font-semibold text-gray-300">Edit Campaign</p>
+        <h1 className="text-xl font-semibold text-white truncate max-w-md">
+          {campaignDetails?.internalName || "Untitled Campaign"}
         </h1>
-        <div className="flex items-center mt-1">
-          <p className="text-md font-semibold text-gray-400">{campaignType}</p>
+        <div className="flex items-center mt-1 space-x-2">
+          <p className="text-sm font-medium text-gray-400 capitalize">
+            {campaignType.replace("-", " ")}
+          </p>
           <StatusBadge status={status} />
         </div>
       </div>

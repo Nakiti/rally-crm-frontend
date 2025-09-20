@@ -18,7 +18,7 @@ const CampaignPageLayout: React.FC<CampaignPageLayoutProps> = ({ children, param
     const isEditorRoute = pathname.includes('/editor')
 
     return (
-        <div className="overflow-y-auto h-screen">
+        <div className="">
             {!isEditorRoute && <CampaignHeaderBar campaignType={"crowdfunding"} campaign={campaign} campaignId={campaignId}/>}
             {children}
         </div>

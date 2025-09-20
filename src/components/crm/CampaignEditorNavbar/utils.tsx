@@ -2,7 +2,7 @@ import { Target, Ticket, Users, FileText } from 'lucide-react';
 import { CampaignType, CampaignStatus } from './types';
 
 export const getCampaignIcon = (campaignType: CampaignType) => {
-  const iconClass = "h-16 w-16 p-1 border-2 border-white rounded-sm";
+  const iconClass = "h-12 w-12 p-2 border-2 border-gray-300 rounded-lg text-gray-300";
   
   switch (campaignType) {
     case "crowdfunding":
@@ -19,13 +19,13 @@ export const getCampaignIcon = (campaignType: CampaignType) => {
 export const getStatusBadgeClass = (status?: string): string => {
   switch (status) {
     case "active":
-      return "bg-green-100 text-green-800";
+      return "bg-green-900/30 text-green-400 border border-green-500/30";
     case "inactive":
-      return "bg-gray-100 text-gray-800";
+      return "bg-gray-700/30 text-gray-400 border border-gray-500/30";
     case "draft":
-      return "bg-yellow-100 text-yellow-800";
+      return "bg-yellow-900/30 text-yellow-400 border border-yellow-500/30";
     default:
-      return "bg-red-100 text-red-800";
+      return "bg-red-900/30 text-red-400 border border-red-500/30";
   }
 };
 
@@ -34,5 +34,6 @@ export const formatStatus = (status?: string): string => {
 };
 
 export const isActiveTab = (pathname: string, targetPath: string): boolean => {
-  return pathname.split("/")[5] === targetPath.split("/")[5];
+  console.log(pathname, targetPath)
+  return pathname.split("/")[4] === targetPath.split("/")[4];
 };

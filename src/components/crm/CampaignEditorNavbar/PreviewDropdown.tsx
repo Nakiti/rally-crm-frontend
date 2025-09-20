@@ -30,20 +30,22 @@ const PreviewDropdown: React.FC<PreviewDropdownProps> = ({ pageLinks }) => {
 
   return (
     <div className="relative inline-block" ref={dropdownRef}>
-      <div
+      <button
         onClick={toggleDropdown}
-        className="cursor-pointer px-4 py-2 text-white text-sm flex flex-row justify-between items-center space-x-4"
+        className="cursor-pointer px-3 py-2 text-gray-300 text-sm flex flex-row justify-between items-center space-x-2 hover:text-white transition-colors duration-200 border border-gray-600 rounded-md hover:border-gray-500"
       >
-        <p>Preview a Page</p>
-        {showLinks ? <ChevronUp /> : <ChevronDown />}
-      </div>
+        <span>Preview</span>
+        {showLinks ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+      </button>
       {showLinks && (
-        <div className="absolute left-0 bg-gray-800 border border-gray-200 shadow-xs w-48 z-50">
+        <div className="absolute right-0 top-full mt-1 bg-gray-800 border border-gray-600 shadow-lg w-48 z-50 rounded-md overflow-hidden">
           {pageLinks.filter(item => item != null).map((item, index) => (
             <a
               key={index}
               href={`${item?.link}preview`}
-              className="block border-b border-gray-200 px-4 py-3 text-sm text-white hover:bg-gray-700"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 border-b border-gray-700 last:border-b-0"
             >
               {item?.title}
             </a>

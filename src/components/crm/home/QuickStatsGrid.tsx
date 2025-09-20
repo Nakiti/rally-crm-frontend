@@ -38,9 +38,9 @@ const QuickStatsGrid = ({ quickStats, loading }: QuickStatsGridProps) => {
    }
 
    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
          {quickStats.map((stat: QuickStat, index: number) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+            <div key={index} className="bg-white rounded-xl p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
                <div className="flex items-center justify-between">
                   <div className="p-2 bg-gray-50 rounded-lg">
                      {stat.icon}
@@ -52,7 +52,7 @@ const QuickStatsGrid = ({ quickStats, loading }: QuickStatsGridProps) => {
                      {stat.change}
                   </div>
                </div>
-               <div className="mt-4">
+               <div className="mt-2">
                   <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
                   <p className="text-sm font-medium text-gray-700 mt-1">{stat.label}</p>
                   {stat.subtitle && (

@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Filter, Download } from "lucide-react";
 import DonationsTable from "@/components/crm/DonationsTable";
+import { 
+  TransactionStats, 
+  TransactionHeader, 
+  TransactionFilters, 
+  TransactionEmptyState 
+} from "@/components/crm/transactions";
 import { useGetDonations } from "@/hooks/crm/useDonation";
 import { useAuth } from "@/providers/AuthProvider";
 import { Button } from "@/components/ui";
@@ -21,18 +26,26 @@ const TransactionsPage = () => {
     
     if (!organizationId) {
         return (
-            <div className="flex items-center justify-center h-64">
-                <p className="text-gray-500">Unable to load organization data</p>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Unable to load organization data</h3>
+                    <p className="text-gray-600">Please check your authentication and try again.</p>
+                </div>
             </div>
         );
     }
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-64">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading transactions...</p>
+                    <p className="mt-4 text-gray-600 text-lg">Loading transactions...</p>
                 </div>
             </div>
         );
@@ -40,12 +53,18 @@ const TransactionsPage = () => {
 
     if (error) {
         return (
-            <div className="flex items-center justify-center h-64">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-red-600 mb-4">Failed to load transactions</p>
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Failed to load transactions</h3>
+                    <p className="text-gray-600 mb-6">There was an error loading your transactions. Please try again.</p>
                     <Button 
                         onClick={() => window.location.reload()} 
-                        variant="outline"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
                         Try Again
                     </Button>
@@ -55,138 +74,54 @@ const TransactionsPage = () => {
     }
 
     const donations = donationsData?.donations || [];
-    const totalAmount = donations.reduce((sum, donation) => sum + (donation.amount || 0), 0);
-    const totalTransactions = donations.length;
+    const hasActiveFilters = Object.keys(filters).some(key => 
+        filters[key as keyof DonationFilters] !== undefined
+    );
+
+    const handleExport = () => {
+        // TODO: Implement export functionality
+        console.log('Export transactions');
+    };
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Transactions</h1>
-                    <p className="text-gray-600 mt-1">
-                        View and manage all donation transactions
-                    </p>
-                </div>
-                <div className="flex gap-2">
-                    <Button 
-                        onClick={() => setShowFilters(!showFilters)}
-                        variant="outline"
-                        className="flex items-center gap-2"
-                    >
-                        <Filter className="w-4 h-4" />
-                        Filters
-                    </Button>
-                    <Button 
-                        variant="outline"
-                        className="flex items-center gap-2"
-                    >
-                        <Download className="w-4 h-4" />
-                        Export
-                    </Button>
-                </div>
-            </div>
-
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-sm font-medium text-gray-500">Total Transactions</h3>
-                    <p className="text-2xl font-bold text-gray-900">{totalTransactions.toLocaleString()}</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-sm font-medium text-gray-500">Total Amount</h3>
-                    <p className="text-2xl font-bold text-gray-900">${totalAmount.toLocaleString()}</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-sm font-medium text-gray-500">Average Donation</h3>
-                    <p className="text-2xl font-bold text-gray-900">
-                        ${totalTransactions > 0 ? (totalAmount / totalTransactions).toFixed(2) : '0.00'}
-                    </p>
-                </div>
-            </div>
-
-            {/* Filters Panel */}
-            {showFilters && (
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Filter Transactions</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                            <select 
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={filters.status || ''}
-                                onChange={(e) => setFilters({...filters, status: e.target.value as any || undefined})}
-                            >
-                                <option value="">All Statuses</option>
-                                <option value="completed">Completed</option>
-                                <option value="pending">Pending</option>
-                                <option value="failed">Failed</option>
-                                <option value="refunded">Refunded</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Date From</label>
-                            <input 
-                                type="date"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={filters.dateFrom || ''}
-                                onChange={(e) => setFilters({...filters, dateFrom: e.target.value || undefined})}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Date To</label>
-                            <input 
-                                type="date"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={filters.dateTo || ''}
-                                onChange={(e) => setFilters({...filters, dateTo: e.target.value || undefined})}
-                            />
-                        </div>
-                    </div>
-                    <div className="mt-4 flex gap-2">
-                        <Button 
-                            onClick={() => setFilters({})}
-                            variant="outline"
-                        >
-                            Clear Filters
-                        </Button>
-                        <Button 
-                            onClick={() => setShowFilters(false)}
-                        >
-                            Apply Filters
-                        </Button>
-                    </div>
-                </div>
-            )}
-
-            {/* Transactions Table */}
-            {donations.length > 0 ? (
-                <DonationsTable 
-                    allDonations={donations} 
-                    organizationId={organizationId} 
+        <div className="min-h-screen bg-gray-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {/* Header */}
+                <TransactionHeader 
+                    onToggleFilters={() => setShowFilters(!showFilters)}
+                    onExport={handleExport}
+                    showFilters={showFilters}
                 />
-            ) : (
-                <div className="text-center py-12">
-                    <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <Filter className="w-8 h-8 text-gray-400" />
+
+                {/* Stats Section */}
+                {donations.length > 0 && (
+                    <TransactionStats donations={donations} />
+                )}
+
+                {/* Filters Panel */}
+                {showFilters && (
+                    <TransactionFilters 
+                        filters={filters}
+                        onFiltersChange={setFilters}
+                        onClose={() => setShowFilters(false)}
+                    />
+                )}
+
+                {/* Main Content */}
+                {donations.length > 0 ? (
+                    <DonationsTable 
+                        allDonations={donations} 
+                        organizationId={organizationId} 
+                    />
+                ) : (
+                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                        <TransactionEmptyState 
+                            hasFilters={hasActiveFilters}
+                            onClearFilters={() => setFilters({})}
+                        />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions found</h3>
-                    <p className="text-gray-500 mb-6">
-                        {Object.keys(filters).length > 0 
-                            ? "Try adjusting your filters to see more transactions"
-                            : "Transactions will appear here once donations are made"
-                        }
-                    </p>
-                    {Object.keys(filters).length > 0 && (
-                        <Button 
-                            onClick={() => setFilters({})}
-                            variant="outline"
-                        >
-                            Clear Filters
-                        </Button>
-                    )}
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 };

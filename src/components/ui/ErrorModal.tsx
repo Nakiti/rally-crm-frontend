@@ -7,7 +7,7 @@ interface ErrorModalProps {
   title?: string;
 }
 
-const ErrorModal: React.FC<ErrorModalProps> = ({ 
+export const ErrorModal: React.FC<ErrorModalProps> = ({ 
   message, 
   onClose, 
   title = 'Error' 
@@ -37,4 +37,3 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
   );
 };
 
-export default ErrorModal;

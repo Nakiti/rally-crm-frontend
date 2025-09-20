@@ -44,6 +44,6 @@ export const createSession = async (data: SessionData): Promise<SessionResponse>
  */
 export const logOut = async (): Promise<{ message: string }> => {
   const response = await apiClient.post('/public/auth/logout');
-  return response.data;
+  return response.data.data;
 };
 

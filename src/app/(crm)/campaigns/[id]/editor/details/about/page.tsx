@@ -4,7 +4,7 @@ import { useParams } from "next/navigation"
 import { useGetCampaignById, useUpdateCampaign } from "@/hooks/crm/useCampaign"
 import { Input } from "@/components/ui/Input"
 import { Button } from "@/components/ui/Button"
-import ErrorModal from "@/components/ui/ErrorModal"
+import { ErrorModal } from "@/components/ui"
 import { EditorLoadingSkeleton } from "@/components/ui/LoadingSkeleton"
 import { useCampaignEditorStore } from "@/stores/crm/useCampaignEditorStore"
 

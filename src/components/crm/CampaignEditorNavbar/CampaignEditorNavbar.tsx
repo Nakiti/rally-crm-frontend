@@ -17,7 +17,7 @@ const CampaignEditorNavbar: React.FC<CampaignEditorNavbarProps> = ({
   status,
   hasUnsavedChanges = false,
   isPublishing = false,
-  isSaving = false,
+  isSaving = false, 
   campaignType = "crowdfunding",
   campaignDetails,
 }) => {
@@ -32,10 +32,10 @@ const CampaignEditorNavbar: React.FC<CampaignEditorNavbarProps> = ({
   };
 
   return (
-    <div className="border-b border-gray-200 bg-gray-800 text-white">
-      <BackButton organizationId={organizationId} campaignId={campaignId} />
+    <div className="border-b border-gray-700 bg-gray-800 text-white shadow-lg">
+      <BackButton />
 
-      <div className="flex items-center justify-between w-11/12 mx-auto py-2">
+      <div className="flex items-center justify-between w-11/12 mx-auto py-4">
         <CampaignHeader 
           campaignType={campaignType as CampaignType}
           campaignDetails={campaignDetails}

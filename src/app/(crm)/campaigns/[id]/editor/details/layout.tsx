@@ -12,7 +12,7 @@ const DetailsLayout: React.FC<DetailsLayoutProps> = ({ params, children }) => {
   const navigationLinks = getNavigationLinks(campaignId);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm w-11/12 mx-auto flex flex-row">
+    <div className="bg-white rounded-lg shadow-sm w-11/12 mx-auto flex flex-row mt-4 mb-8">
       <NavigationSidebar
         campaignId={campaignId}
         pathName={pathName}

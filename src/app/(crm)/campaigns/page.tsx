@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
 import CampaignsTable from "@/components/crm/SingleCampaignView/CampaignsTable";
 import NewCampaignModal from "@/components/crm/NewCampaignModal";
+import { CampaignStats, CampaignHeader, CampaignEmptyState } from "@/components/crm/campaigns";
 import { useGetCampaigns } from "@/hooks/crm/useCampaign";
 import { useAuth } from "@/providers/AuthProvider";
 import { Button } from "@/components/ui";
@@ -20,18 +20,26 @@ const CampaignsPage = () => {
     
     if (!organizationId) {
         return (
-            <div className="flex items-center justify-center h-64">
-                <p className="text-gray-500">Unable to load organization data</p>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Unable to load organization data</h3>
+                    <p className="text-gray-600">Please check your authentication and try again.</p>
+                </div>
             </div>
         );
     }
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-64">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading campaigns...</p>
+                    <p className="mt-4 text-gray-600 text-lg">Loading campaigns...</p>
                 </div>
             </div>
         );
@@ -39,12 +47,18 @@ const CampaignsPage = () => {
 
     if (error) {
         return (
-            <div className="flex items-center justify-center h-64">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-red-600 mb-4">Failed to load campaigns</p>
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Failed to load campaigns</h3>
+                    <p className="text-gray-600 mb-6">There was an error loading your campaigns. Please try again.</p>
                     <Button 
                         onClick={() => window.location.reload()} 
-                        variant="outline"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
                         Try Again
                     </Button>
@@ -56,56 +70,36 @@ const CampaignsPage = () => {
     const campaigns = campaignsData || [];
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Campaigns</h1>
-                    <p className="text-gray-600 mt-1">
-                        Manage your fundraising campaigns
-                    </p>
-                </div>
-                <Button 
-                    onClick={() => setShowNewCampaignModal(true)}
-                    className="flex items-center gap-2"
-                >
-                    <Plus className="w-4 h-4" />
-                    New Campaign
-                </Button>
-            </div>
+        <div className="min-h-screen bg-gray-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {/* Header */}
+                <CampaignHeader onCreateCampaign={() => setShowNewCampaignModal(true)} />
 
-            {/* Campaigns Table */}
-            {campaigns.length > 0 ? (
-                <CampaignsTable 
-                    allCampaigns={campaigns} 
-                    organizationId={organizationId} 
-                />
-            ) : (
-                <div className="text-center py-12">
-                    <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <Plus className="w-8 h-8 text-gray-400" />
+                {/* Stats Section */}
+                {campaigns.length > 0 && (
+                    <CampaignStats campaigns={campaigns} />
+                )}
+
+                {/* Main Content */}
+                {campaigns.length > 0 ? (
+                    <CampaignsTable 
+                        allCampaigns={campaigns} 
+                        organizationId={organizationId} 
+                    />
+                ) : (
+                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                        <CampaignEmptyState onCreateCampaign={() => setShowNewCampaignModal(true)} />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No campaigns yet</h3>
-                    <p className="text-gray-500 mb-6">
-                        Get started by creating your first fundraising campaign
-                    </p>
-                    <Button 
-                        onClick={() => setShowNewCampaignModal(true)}
-                        className="flex items-center gap-2"
-                    >
-                        <Plus className="w-4 h-4" />
-                        Create Your First Campaign
-                    </Button>
-                </div>
-            )}
+                )}
 
-            {/* New Campaign Modal */}
-            {showNewCampaignModal && (
-                <NewCampaignModal 
-                    setShow={setShowNewCampaignModal}
-                    organizationId={organizationId}
-                />
-            )}
+                {/* New Campaign Modal */}
+                {showNewCampaignModal && (
+                    <NewCampaignModal 
+                        setShow={setShowNewCampaignModal}
+                        organizationId={organizationId}
+                    />
+                )}
+            </div>
         </div>
     );
 };

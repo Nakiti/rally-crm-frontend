@@ -11,6 +11,12 @@ export interface CampaignAvailableDesignation {
     updatedAt: string;
 }
 
+export interface CampaignSettings {
+    showLeaderboard?: boolean;
+    allowAnonymousDonations?: boolean;
+    anonymizeAllDonations?: boolean;
+}
+
 export interface Campaign {
     id: string;
     organizationId: string;
@@ -25,6 +31,7 @@ export interface Campaign {
     icon: string;
     bannerImageUrl: string | null;
     pageConfig: object | null; // You could define a more specific type for this later
+    settings?: CampaignSettings; // Campaign-specific settings
     isActive: boolean;
     createdAt: string; // Dates are typically serialized as ISO strings over JSON
     updatedAt: string;
@@ -45,6 +52,7 @@ export interface UpdateCampaignData {
     goalAmount?: number;
     slug?: string;
     updated_by?: string;
+    isActive: boolean
 }
 
 // Define the shape of the data for updating a campaign's page config

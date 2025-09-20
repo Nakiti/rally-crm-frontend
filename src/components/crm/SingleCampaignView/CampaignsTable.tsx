@@ -41,19 +41,31 @@ const CampaignsTable: React.FC<CampaignsTableProps> = ({ allCampaigns, organizat
 
   // 4. Render the generic components with specific props
   return (
-    <div className="overflow-hidden">
-      <Table
-        data={paginatedData}
-        columns={columns}
-        sortConfig={sortConfig}
-        onSort={sort}
-        onRowClick={handleRowClick}
-      />
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-200">
+        <h2 className="text-lg font-semibold text-gray-900">All Campaigns</h2>
+        <p className="text-sm text-gray-600 mt-1">
+          Click on any campaign to view details and manage settings
+        </p>
+      </div>
+      <div className="overflow-hidden">
+        <Table
+          data={paginatedData}
+          columns={columns}
+          sortConfig={sortConfig}
+          onSort={sort}
+          onRowClick={handleRowClick}
+        />
+      </div>
+      {totalPages > 1 && (
+        <div className="px-6 py-4 border-t border-gray-200">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
     </div>
   );
 };

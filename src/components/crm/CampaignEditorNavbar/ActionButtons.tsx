@@ -20,20 +20,26 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   onDeactivate,
 }) => {
   return (
-    <div className="flex space-x-6 text-md">
-      {status === "inactive" ? (
+    <div className="flex space-x-4 text-sm">
+      {status === "draft" ? (
         <button 
-          className={`py-3 px-8 rounded-md text-white transition-all duration-200 ${
-            hasUnsavedChanges ? "bg-blue-700 hover:bg-blue-500" : "bg-gray-300 cursor-not-allowed"
+          className={`py-2 px-6 rounded-md text-white transition-all duration-200 ${
+            isSaving 
+              ? "bg-gray-500 cursor-not-allowed" 
+              : "bg-blue-700 hover:bg-blue-500 cursor-pointer"
           }`}
           onClick={onSave}
-          disabled={!hasUnsavedChanges || isSaving}
+          disabled={isSaving}
         >
-          {isSaving ? "Saving..." : "Save & Exit"}
+          {isSaving ? "Saving..." : "Save"}
         </button>
       ) : (
         <button 
-          className="bg-blue-700 hover:bg-blue-500 py-3 px-8 rounded-md text-white transition-all duration-200"
+          className={`py-2 px-6 rounded-md text-white transition-all duration-200 ${
+            isPublishing || isSaving
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-blue-700 hover:bg-blue-500 cursor-pointer"
+          }`}
           onClick={onDeactivate}
           disabled={isPublishing || isSaving}
         >
@@ -41,7 +47,11 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         </button>
       )}
       <button 
-        className="py-3 px-8 rounded-md text-white transition-all duration-200 bg-blue-700 hover:bg-blue-500"
+        className={`py-2 px-6 rounded-md text-white transition-all duration-200 ${
+          isPublishing || isSaving
+            ? "bg-gray-500 cursor-not-allowed"
+            : "bg-green-700 hover:bg-green-500 cursor-pointer"
+        }`}
         onClick={onPublish}
         disabled={isPublishing || isSaving}
       >

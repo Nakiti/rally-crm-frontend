@@ -18,11 +18,11 @@ interface RecentActivityProps {
 const RecentActivity = ({ recentDonations, loading, formatTimeAgo }: RecentActivityProps) => {
    return (
       <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
-         <div className="p-6 border-b border-gray-100">
+         <div className="p-4 border-b border-gray-100">
             <h2 className="text-xl font-semibold text-gray-900">Recent Activity</h2>
             <p className="text-sm text-gray-600 mt-1">Latest donations and updates</p>
          </div>
-         <div className="p-6">
+         <div className="p-4">
             <div className="space-y-4">
                {loading ? (
                   // Loading skeleton
