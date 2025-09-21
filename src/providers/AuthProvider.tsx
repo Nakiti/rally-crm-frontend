@@ -30,14 +30,24 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       return;
     }
 
+    console.log('Final check:', {
+      hasData: !!currentUserData,
+      isError: isError
+    });
+
     if (currentUserData && !isError) {
       setSession(currentUserData);
-      setUserType('staff'); // Note: This is hardcoded
-    } else {
-
-      console.log("error", isError)
-      setSession(null);
-      setUserType(null);
+      setUserType('staff');
+    } else if (isError) {
+      // Only clear session if we get a definitive error (not just loading)
+      // Add a small delay to handle race conditions
+      const timeoutId = setTimeout(() => {
+        console.log("error", isError)
+        setSession(null);
+        setUserType(null);
+      }, 100);
+      
+      return () => clearTimeout(timeoutId);
     }
   }, [currentUserData, isError, isLoading]);
 

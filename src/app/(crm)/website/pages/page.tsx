@@ -31,7 +31,7 @@ const WebsitePages = () => {
             description: 'Configure the first page your visitors will see',
             pageType: 'landing',
             icon: <Home className="w-8 h-8 text-blue-600" />,
-            href: '/landing',
+            href: '/website/pages/editor/landing',
             isConfigured: true
         },
         {
@@ -40,7 +40,7 @@ const WebsitePages = () => {
             description: 'Tell your organization\'s story and mission',
             pageType: 'about',
             icon: <Info className="w-8 h-8 text-green-600" />,
-            href: '/about',
+            href: '/website/pages/editor/about',
             isConfigured: false
         }
     ];

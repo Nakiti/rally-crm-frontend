@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { useGenerateSasUrlMutation } from '@/hooks/crm/useUploadApi';
 import { UploadCloud, X } from 'lucide-react'; // Using lucide-react for icons
-import { Button } from './Button';
+import { useUploadFileToAzureMutation } from '@/hooks/crm/useUploadApi';
 
 export interface ImageUploaderProps {
   label: string;
@@ -13,47 +13,30 @@ export interface ImageUploaderProps {
 }
 
 export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, currentImageUrl, onUpload, onRemove }) => {
-  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const generateSasUrlMutation = useGenerateSasUrlMutation();
 
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  // 2. --- Initialize both mutation hooks ---
+  const generateSasUrlMutation = useGenerateSasUrlMutation();
+  const uploadFileMutation = useUploadFileToAzureMutation();
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    setError(null);
-
-    // 1. Get the secure upload URL from our backend
     generateSasUrlMutation.mutate({ fileName: file.name, fileType: file.type }, {
-      onSuccess: async (data) => {
-        try {
-          // 2. Upload the file directly to Azure Blob Storage using the SAS URL
-          const uploadResponse = await fetch(data.uploadUrl, {
-            method: 'PUT',
-            body: file,
-            headers: {
-              'x-ms-blob-type': 'BlockBlob',
-              'Content-Type': file.type,
-            },
-          });
-
-          if (!uploadResponse.ok) {
-            throw new Error('File upload failed.');
-          }
-
-          // 3. On success, call the parent component's onUpload with the permanent URL
-          onUpload(data.accessUrl);
-        } catch (uploadError) {
-          setError('Failed to upload image. Please try again.');
-        }
-      },
-      onError: () => {
-        setError('Could not prepare upload. Please try again.');
+      onSuccess: (sasData) => {
+        uploadFileMutation.mutate({ uploadUrl: sasData.uploadUrl, file }, {
+          onSuccess: () => {
+            console.log("url", sasData.accessUrl)
+            onUpload(sasData.accessUrl);
+          },
+        });
       },
     });
   };
 
-  const isLoading = generateSasUrlMutation.isPending;
+  const isLoading = generateSasUrlMutation.isPending || uploadFileMutation.isPending;
+  const error = generateSasUrlMutation.error?.message || uploadFileMutation.error?.message;
 
   return (
     <div className="mb-6">
@@ -62,7 +45,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, currentImag
       </p>
       
       {currentImageUrl ? (
-        <div className="relative w-full h-24 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 overflow-hidden">
+        <div className="relative w-full h-24 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg  overflow-hidden">
           <img src={currentImageUrl} alt="Current image" className="h-full w-full object-cover rounded-lg" />
           {onRemove && (
             <button
@@ -74,7 +57,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, currentImag
             </button>
           )}
           <div 
-            className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 cursor-pointer flex items-center justify-center"
+            className="absolute inset-0 bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 cursor-pointer flex items-center justify-center"
             onClick={() => fileInputRef.current?.click()}
           >
             <div className="opacity-0 hover:opacity-100 transition-opacity duration-200 bg-white bg-opacity-90 rounded-full p-2">
@@ -110,9 +93,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, currentImag
         </label>
       )}
       
-      {isLoading && (
-        <div className="mt-2 text-sm text-gray-500">Uploading...</div>
-      )}
+      {isLoading && (<div className="mt-2 text-sm text-gray-500">Uploading...</div>)}
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );

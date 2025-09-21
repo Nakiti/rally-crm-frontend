@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { useGetCampaignById } from './useCampaign';
 import { useCampaignEditorStore } from '@/stores/crm/useCampaignEditorStore';
-import { campaignPageEditorConfig } from '@/config/campaignPageEditor.config';
-import { campaignSectionDefaults } from '@/config/campaignSectionDefaults.config';
+import { campaignPageEditorConfig, CampaignPageType } from '@/config/campaignPageEditor.config';
+import { campaignSectionDefaults, CampaignSectionType } from '@/config/campaignSectionDefaults.config';
 
 /**
  * A custom hook responsible for the entire logic of fetching, merging,
@@ -10,7 +10,7 @@ import { campaignSectionDefaults } from '@/config/campaignSectionDefaults.config
  * @param campaignId The ID of the campaign to edit.
  * @param pageSlug The specific page slug being edited.
  */
-export const useInitializeCampaignEditorStore = (campaignId: string, pageSlug: string) => {
+export const useInitializeCampaignEditorStore = (campaignId: string, pageSlug: CampaignPageType) => {
   // 1. Fetch the raw data from the server
   const { data: initialCampaign, isLoading, isError } = useGetCampaignById(campaignId);
   const { initialize } = useCampaignEditorStore();
@@ -22,21 +22,36 @@ export const useInitializeCampaignEditorStore = (campaignId: string, pageSlug: s
     const editorRules = campaignPageEditorConfig[pageSlug];
     if (!editorRules) return initialCampaign;
 
-    const savedPageConfig = initialCampaign.pageConfig?.[pageSlug];
+    const savedPageConfig = (initialCampaign.pageConfig as any)?.[pageSlug];
     const savedSections = savedPageConfig?.sections || [];
 
-    const completeSections = editorRules.availableSections.map(sectionType => {
-      const savedSection = savedSections.find(s => s.type === sectionType);
+    console.log("editor rules ", editorRules)
+    console.log("saved sections ", savedSections)
+
+    const completeSections = editorRules.availableSections.map((sectionType: CampaignSectionType) => {
+      const savedSection = savedSections.find((s: any) => s.type === sectionType);
+      const defaultSection = campaignSectionDefaults[sectionType];
+      
       if (savedSection) {
-        return savedSection;
-      } else {
+        // Merge saved section with defaults, ensuring all required props exist
         return {
-          type: sectionType,
-          enabled: false,
-          props: campaignSectionDefaults[sectionType] || {},
+          ...defaultSection,
+          ...savedSection,
+          props: {
+            ...defaultSection?.props,
+            ...savedSection.props,
+          },
+        };
+      } else {
+        // Use default section with enabled set to false for new sections
+        return {
+          ...defaultSection,
+          enabled: true,
         };
       }
     });
+
+    console.log("complete campaign sections ", completeSections)
 
     return {
       ...initialCampaign,

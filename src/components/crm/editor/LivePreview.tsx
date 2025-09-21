@@ -2,31 +2,44 @@
 
 import { useCampaignEditorStore } from '@/stores/crm/useCampaignEditorStore';
 import { useParams } from 'next/navigation';
-import LeaderBoardPreview from './sections/previews/landingPage/LeaderBoardPreview';
+import LeaderBoardPreview from './sections/previews/campaign/landingPage/LeaderBoardPreview';
 
 // Import all your small, specialized PREVIEW components
-import { HeroSectionPreview } from './sections/previews/landingPage/HeroSectionPreview';
-import { StorySectionPreview } from './sections/previews/landingPage/StorySectionPreview';
-import SidebarPreview from './sections/previews/landingPage/SidebarPreview';
-import ProgressSectionPreview from './sections/previews/landingPage/ProgressSectionPreview';
-import { DonationFormPreview } from './sections/previews/donationForm/DonationFormPreview';
-import LandingPagePreview from './sections/previews/landingPage/LandingPagePreview';
-import { ThankYouPagePreview } from './sections/previews/thankYouPage/ThankYouPagePreview';
-// import { FAQSectionPreview } from './sections/previews/FAQSectionPreview';
-// ... import other section previews as you create them
+import { HeroSectionPreview } from './sections/previews/campaign/landingPage/HeroSectionPreview';
+import { StorySectionPreview } from './sections/previews/campaign/landingPage/StorySectionPreview';
+import SidebarPreview from './sections/previews/campaign/landingPage/SidebarPreview';
+import ProgressSectionPreview from './sections/previews/campaign/landingPage/ProgressSectionPreview';
+import { DonationFormPreview } from './sections/previews/campaign/donationForm/DonationFormPreview';
+import LandingPagePreview from './sections/previews/campaign/landingPage/LandingPagePreview';
+import { ThankYouPagePreview } from './sections/previews/campaign/thankYouPage/ThankYouPagePreview';
+import { useShallow } from 'zustand/shallow';
+import { default as OrganizationLandingPage } from './sections/previews/organization/landing/LandingPagePreview';
+import AboutPagePreview from './sections/previews/organization/about/AboutPagePreview';
+
+interface LivePreviewProps {
+  useEditorStore: any; // The specific Zustand store hook to use
+}
 
 /**
  * The main container for the live preview experience.
  * It reads from the central Zustand store and dynamically renders the
  * appropriate section preview components.
  */
-export function LivePreview() {
+export function LivePreview({useEditorStore} : LivePreviewProps) {
   const params = useParams();
   const pageSlug = params.pageSlug as string;
+  console.log(pageSlug)
 
-  const pageSections = useCampaignEditorStore(
-    (state) => state.campaign?.pageConfig?.[pageSlug]?.sections || []
+  const pageSections = useEditorStore(
+    useShallow(
+      (state: any) =>
+      state.campaign?.pageConfig?.[pageSlug]?.sections || // For campaigns
+      state.contentConfig?.sections ||                   // For site pages
+      [], 
+    )
   );
+
+  console.log("page sections", pageSections)
 
   if (pageSections.length === 0) {
     return (
@@ -57,6 +70,12 @@ export function LivePreview() {
       ) :
       pageSlug === "thank-you-page" ? (
         <ThankYouPagePreview pageSections={pageSections}/>
+      ) :
+      pageSlug == "landing" ? (
+        <OrganizationLandingPage pageSections={pageSections}/>
+      ) :
+      pageSlug == "about" ? (
+        <AboutPagePreview pageSections={pageSections}/>
       ) :
       (
         // Default layout for other pages: render sections normally

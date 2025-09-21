@@ -26,7 +26,9 @@ export const getOrganizationPageById = async (id: string): Promise<OrganizationP
  * @returns The organization page.
  */
 export const getOrganizationPageByType = async (pageType: string): Promise<OrganizationPage> => {
+    console.log(pageType)
     const response = await apiClient.get(`/crm/organization-pages/type/${pageType}`);
+    console.log(response)
     return response.data.data;
 };
 

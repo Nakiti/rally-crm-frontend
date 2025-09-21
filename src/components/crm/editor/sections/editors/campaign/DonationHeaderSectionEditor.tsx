@@ -2,26 +2,25 @@
 
 import { useCampaignEditorStore } from '@/stores/crm/useCampaignEditorStore';
 import { useParams } from 'next/navigation';
+import { ChevronDown } from 'lucide-react';
 import { CompactInput, ImageUploader, ToggleSwitch } from '@/components/ui'; // Your shared UI components
 
 // The component receives its own data and its index in the sections array
-interface HeroSectionEditorProps {
+interface DonationHeaderSectionEditorProps {
   sectionData: {
-    type: 'hero';
+    type: 'donationHeader';
     enabled: boolean;
     required: boolean;
     collapsed: boolean;
     props: {
       headline?: string;
-      subheadline?: string;
-      imageUrl?: string;
-      buttonText?: string;
+      message?: string;
     };
   };
   sectionIndex: number;
 }
 
-export function HeroSectionEditor({ sectionData, sectionIndex }: HeroSectionEditorProps) {
+export function DonationHeaderSectionEditor({ sectionData, sectionIndex }: DonationHeaderSectionEditorProps) {
   // Get the 'updatePageSectionField' action from the central Zustand store
   const { updatePageSectionField } = useCampaignEditorStore();
   
@@ -36,8 +35,8 @@ export function HeroSectionEditor({ sectionData, sectionIndex }: HeroSectionEdit
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div>
-              <h3 className="font-semibold text-gray-900">Hero Section</h3>
-              <p className="text-xs text-gray-500">Main banner with headline and call-to-action</p>
+              <h3 className="font-semibold text-gray-900">Header Section</h3>
+              <p className="text-xs text-gray-500">Main hedaer and message</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -54,14 +53,9 @@ export function HeroSectionEditor({ sectionData, sectionIndex }: HeroSectionEdit
                 className="p-2 hover:bg-white/50 rounded-lg transition-all duration-200 group"
                 aria-label={sectionData.collapsed ? 'Expand section' : 'Collapse section'}
               >
-                <svg
-                  className={`w-4 h-4 text-gray-600 transition-transform duration-200 group-hover:text-gray-900 ${sectionData.collapsed ? 'rotate-0' : 'rotate-180'}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-600 transition-transform duration-200 group-hover:text-gray-900 cursor-pointer ${sectionData.collapsed ? 'rotate-0' : 'rotate-180'}`}
+                />
               </button>
             )}
           </div>
@@ -78,21 +72,9 @@ export function HeroSectionEditor({ sectionData, sectionIndex }: HeroSectionEdit
               onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.headline', e.target.value)}
             />
             <CompactInput
-              label="Subheadline"
-              value={sectionData.props.subheadline || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.subheadline', e.target.value)}
-            />
-            <CompactInput
-              label="Button Text"
-              value={sectionData.props.buttonText || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.buttonText', e.target.value)}
-            />
-          </div>
-          <div className="pt-2">
-            <ImageUploader
-              label="Background Image"
-              currentImageUrl={sectionData.props.imageUrl}
-              onUpload={(newUrl) => updatePageSectionField(pageSlug, sectionIndex, 'props.imageUrl', newUrl)}
+              label="Message"
+              value={sectionData.props.message || ''}
+              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.message', e.target.value)}
             />
           </div>
         </div>

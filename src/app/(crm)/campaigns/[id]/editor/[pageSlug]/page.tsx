@@ -32,7 +32,7 @@ export default function PageEditor({ params }: PageEditorProps) {
       }
       rightPanel={
         <PreviewPanel>
-          <LivePreview />
+          <LivePreview useEditorStore={useCampaignEditorStore}/>
         </PreviewPanel>
       }
     />

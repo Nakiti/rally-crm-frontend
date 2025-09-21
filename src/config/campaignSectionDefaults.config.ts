@@ -51,6 +51,7 @@ export interface CampaignSection extends BaseSection {
 export interface HeroSection extends BaseSection {
   type: 'hero';
   required: true;
+  enabled: true;
   collapsed: false;
   props: HeroSectionProps;
 }
@@ -58,6 +59,7 @@ export interface HeroSection extends BaseSection {
 export interface StorySection extends BaseSection {
   type: 'story';
   required: true;
+  enabled: true;
   collapsed: false;
   props: StorySectionProps;
 }
@@ -101,8 +103,7 @@ export const campaignSectionDefaults: CampaignSectionDefaults = {
     required: true, // A section can be required by default
     collapsed: false,
     props: {
-      headline: 'Your Campaign Title',
-      buttonText: 'Donate Now'
+      buttonText: 'Donate'
     }
   },
   story: {

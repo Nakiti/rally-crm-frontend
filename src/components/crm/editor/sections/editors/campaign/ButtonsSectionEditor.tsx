@@ -2,6 +2,7 @@
 
 import { useCampaignEditorStore } from '@/stores/crm/useCampaignEditorStore';
 import { useParams } from 'next/navigation';
+import { ChevronDown } from 'lucide-react';
 import { CompactInput, ImageUploader, ToggleSwitch } from '@/components/ui'; // Your shared UI components
 
 // The component receives its own data and its index in the sections array
@@ -56,14 +57,9 @@ export function ButtonsSectionEditor({ sectionData, sectionIndex }: ButtonsSecti
                 className="p-2 hover:bg-white/50 rounded-lg transition-all duration-200 group"
                 aria-label={sectionData.collapsed ? 'Expand section' : 'Collapse section'}
               >
-                <svg
-                  className={`w-4 h-4 text-gray-600 transition-transform duration-200 group-hover:text-gray-900 ${sectionData.collapsed ? 'rotate-0' : 'rotate-180'}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-600 transition-transform duration-200 group-hover:text-gray-900 cursor-pointer ${sectionData.collapsed ? 'rotate-0' : 'rotate-180'}`}
+                />
               </button>
             )}
           </div>

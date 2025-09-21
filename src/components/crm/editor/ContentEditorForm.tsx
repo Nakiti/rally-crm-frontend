@@ -2,19 +2,31 @@
 
 import { useCampaignEditorStore } from '@/stores/crm/useCampaignEditorStore';
 import { useParams } from 'next/navigation';
-import { campaignPageEditorConfig } from '@/config/campaignPageEditor.config'; // Your configuration file
-import { shallow } from 'zustand/shallow';
 import { useShallow } from 'zustand/shallow';
 
-// Create a stable reference for empty array to prevent infinite loops
-const EMPTY_SECTIONS: any[] = [];
+// Import campaign section editor components
+import { 
+  HeroSectionEditor as CampaignHeroSectionEditor,
+  StorySectionEditor as CampaignStorySectionEditor,
+  DonationHeaderSectionEditor,
+  ButtonsSectionEditor,
+  ThankYouHeaderSectionEditor
+} from './sections/editors/campaign';
 
-// Import all of your small, specialized section editor components
-import { HeroSectionEditor } from './sections/editors/HeroSectionEditor';
-import { StorySectionEditor } from './sections/editors/StorySectionEditor';
-import { DonationHeaderSectionEditor } from './sections/editors/DonationHeaderSectionEditor';
-import { ButtonsSectionEditor } from './sections/editors/ButtonsSectionEditor';
-import { ThankYouHeaderSectionEditor } from './sections/editors/ThankYouHeaderSectionEditor';
+// Import organization section editor components
+import {
+  HeroSectionEditor,
+  BannerSectionEditor,
+  MainSectionEditor,
+  AboutSectionEditor,
+  ImpactSectionEditor,
+  FeaturedSectionEditor,
+  StorySectionEditor,
+  WhatSectionEditor,
+  WhySectionEditor,
+  TeamSectionEditor,
+  DonationButtonsSectionEditor
+} from './sections/editors/organization';
 
 interface ContentEditorFormProps {
   useEditorStore: any; // The specific Zustand store hook to use
@@ -31,7 +43,9 @@ export function ContentEditorForm({ useEditorStore, editorConfig }: ContentEdito
   const pageSlug = params.pageSlug as string;
 
   const pageSections = useEditorStore(
+    useShallow(
     (state: any) => state.campaign?.pageConfig?.[pageSlug]?.sections || state.contentConfig?.sections || [],
+    )
   );
 
   const editorRules = editorConfig[pageSlug];
@@ -50,16 +64,50 @@ export function ContentEditorForm({ useEditorStore, editorConfig }: ContentEdito
       ) : (
         pageSections.map((section: any, index: number) => {
           switch (section.type) {
+            // Campaign section types
             case 'hero':
-              return <HeroSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+              // Check if this is a campaign or organization hero section
+              if (useEditorStore === useCampaignEditorStore) {
+                return <CampaignHeroSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+              } else {
+                return <HeroSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+              }
             case 'story':
-              return <StorySectionEditor key={index} sectionData={section} sectionIndex={index} />;
+              // Check if this is a campaign or organization story section
+              if (useEditorStore === useCampaignEditorStore) {
+                return <CampaignStorySectionEditor key={index} sectionData={section} sectionIndex={index} />;
+              } else {
+                return <StorySectionEditor key={index} sectionData={section} sectionIndex={index} />;
+              }
             case 'donationHeader':
-              return <DonationHeaderSectionEditor key={index} sectionData={section} sectionIndex={index}/>
+              return <DonationHeaderSectionEditor key={index} sectionData={section} sectionIndex={index}/>;
             case 'donationButtons':
-              return <ButtonsSectionEditor key={index} sectionData={section} sectionIndex={index}/>
+              // Check if this is a campaign or organization donation buttons section
+              if (useEditorStore === useCampaignEditorStore) {
+                return <ButtonsSectionEditor key={index} sectionData={section} sectionIndex={index}/>;
+              } else {
+                return <DonationButtonsSectionEditor key={index} sectionData={section} sectionIndex={index}/>;
+              }
             case 'thankYouHeader':
-              return <ThankYouHeaderSectionEditor key={index} sectionData={section} sectionIndex={index}/>
+              return <ThankYouHeaderSectionEditor key={index} sectionData={section} sectionIndex={index}/>;
+
+            // Organization section types
+            case 'banner':
+              return <BannerSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+            case 'main':
+              return <MainSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+            case 'about':
+              return <AboutSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+            case 'impact':
+              return <ImpactSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+            case 'featured':
+              return <FeaturedSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+            case 'what':
+              return <WhatSectionEditor key={index} sectionData={section} sectionIndex={index} />;
+            case 'why':
+              return <WhySectionEditor key={index} sectionData={section} sectionIndex={index} />;
+            case 'team':
+              return <TeamSectionEditor key={index} sectionData={section} sectionIndex={index} />;
 
             default:
               return (

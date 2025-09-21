@@ -10,52 +10,38 @@ import { useGetOrganizationPageByType } from './useOrganizationPage';
  * @param organizationId The ID of the campaign to edit.
  * @param pageSlug The specific page slug being edited.
  */
-export const useInitializeWebsiteEditorStore = (organizationId: string, pageSlug: string) => {
-  const { data: initalPageContent, isLoading, isError } = useGetOrganizationPageByType(organizationId);
+export const useInitializeWebsiteEditorStore = (pageSlug: string) => {
+  const { data: initialPageContent, isLoading, isError } = useGetOrganizationPageByType(pageSlug);
   const { initialize } = useWebsiteEditorStore();
 
   // 2. Perform the complex merging logic
   const completePageConfig = useMemo(() => {
-    if (!initalPageContent) return null;
-
+    // The blueprint for this page type
     const editorRules = websitePageEditorConfig[pageSlug];
-    if (!editorRules) return initalPageContent;
+    console.log("editor rules", editorRules)
+    if (!editorRules) return null;
 
-    const savedPageConfig = initalPageContent.pageConfig?.[pageSlug];
-    const savedSections = savedPageConfig?.sections || [];
-
+    // The saved sections for this page, or an empty array if none exist
+    const savedSections = initialPageContent?.contentConfig?.sections || [];
+    
+    // Assemble the full list of sections, merging saved data with defaults
     const completeSections = editorRules.availableSections.map(sectionType => {
       const savedSection = savedSections.find(s => s.type === sectionType);
-      if (savedSection) {
-        return savedSection;
-      } else {
-        return {
-          type: sectionType,
-          enabled: false,
-          props: websiteSectionDefaults[sectionType] || {},
-        };
-      }
+      
+      return savedSection || websiteSectionDefaults[sectionType];
     });
 
-    return {
-      ...initalPageContent,
-      pageConfig: {
-        ...initalPageContent.pageConfig,
-        [pageSlug]: {
-          ...savedPageConfig,
-          sections: completeSections,
-        },
-      },
-    };
-  }, [initalPageContent, pageSlug]);
+    return { sections: completeSections };
+  }, [initialPageContent, pageSlug]);
 
   // 3. Initialize the store
   useEffect(() => {
+    console.log("config", completePageConfig)
     if (completePageConfig) {
       initialize(pageSlug, completePageConfig);
     }
   }, [completePageConfig, initialize, pageSlug]);
 
   // 4. Return the loading and error states for the UI to use
-  return { isLoading, isError };
+  return { isLoading, isError }; 
 };

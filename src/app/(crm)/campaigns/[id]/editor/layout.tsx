@@ -8,7 +8,7 @@ import LoadingOverlay from "@/components/ui/LoadingOverlay"
 import { EditorLoadingSkeleton } from "@/components/ui/LoadingSkeleton"
 import { useCampaignEditorStore } from "@/stores/crm/useCampaignEditorStore"
 
-interface EditLayoutProps {
+interface EditLayoutProps { 
   params: {
     id: string;
     organizationId: string;

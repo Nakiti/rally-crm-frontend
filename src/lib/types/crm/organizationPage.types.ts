@@ -18,6 +18,7 @@ export interface CreateOrganizationPageData {
 // Define the shape of the data for updating an organization page
 export interface UpdateOrganizationPageData {
     pageType?: PageType;
+    isPublished: boolean;
     contentConfig?: object;
 }
 

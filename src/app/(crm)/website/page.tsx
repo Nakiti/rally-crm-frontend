@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowLeft, Globe, Layout, FileText } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
-import { useRouter } from "next/navigation";
 
 /**
  * WebsitePage Component
@@ -17,7 +16,6 @@ import { useRouter } from "next/navigation";
  * @returns JSX element containing the website configuration page
  */
 const WebsitePage: React.FC = () => {
-    const router = useRouter()
 
     return (
         <div className="w-full h-full overflow-y-auto">

@@ -1,5 +1,5 @@
 // Types for website page editor configuration
-export type WebsitePageType = 'landing-page' | 'about-page';
+export type WebsitePageType = 'landing' | 'about';
 
 export type WebsiteSectionType = 'banner' | 'main' | 'about' | 'impact' | 'featured' | 'hero' | 'story' | 'what' | 'why' | 'team' | 'donationButtons';
 
@@ -81,7 +81,6 @@ export interface WebsiteSection extends BaseWebsiteSection {
 export interface WebsitePageConfig {
   title: string;
   availableSections: WebsiteSectionType[];
-  defaultSections: WebsiteSection[];
 }
 
 // Website page editor configuration interface
@@ -90,26 +89,12 @@ export type WebsitePageEditorConfig = {
 }
 
 export const websitePageEditorConfig: WebsitePageEditorConfig = {
-  'landing-page': {
+  'landing': {
     title: 'Landing Page',
     availableSections: ['banner', 'main', 'about', 'impact', 'featured'],
-    defaultSections: [
-      { type: 'hero', enabled: true, required: true, collapsed: false, props: { headline: 'Your Campaign Title', buttonText: 'Donate Now' } },
-      { type: 'main', enabled: true, required: true, collapsed: false, props: { title: 'Our Story' } },
-      { type: 'about', enabled: true, required: true, collapsed: false, props: { title: 'Our Story' } },
-      { type: 'impact', enabled: true, required: true, collapsed: false, props: { title: 'Our Story' } },
-      { type: 'featured', enabled: true, required: true, collapsed: false, props: { title: 'Our Story' } },
-    ],
   },
-  'about-page': {
+  'about': {
     title: 'About Page',
-    availableSections: ['banner', 'donationButtons'],
-    defaultSections: [
-      { type: 'banner', enabled: true, props: { headline: "Donate!", message: "Your Support is Greatly Appreciated" } },
-      { type: 'story', enabled: true, props: {} },
-      { type: 'what', enabled: true, props: {} },
-      { type: 'why', enabled: true, props: {} },
-      { type: 'team', enabled: true, props: {} },
-    ],
+    availableSections: ['hero', 'story', 'what', 'why', 'team'],
   }
 };

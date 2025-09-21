@@ -31,7 +31,7 @@ export const CompactTextArea: React.FC<CompactTextAreaProps> = ({
         id={textareaId}
         rows={rows}
         className={`
-          w-full px-2 py-1.5 text-sm border rounded-md shadow-sm placeholder-gray-400
+          w-full px-2 py-1.5 text-sm border rounded-md placeholder-gray-400
           focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500
           disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed
           resize-vertical bg-white

@@ -1,7 +1,7 @@
 'use client';
 
-import { useCampaignEditorStore } from '@/stores/crm/useCampaignEditorStore';
-import { useParams } from 'next/navigation';
+import { useWebsiteEditorStore } from '@/stores/crm/useWebsiteEditorStore';
+import { ChevronDown } from 'lucide-react';
 import { CompactInput, CompactTextArea, ToggleSwitch } from '@/components/ui';
 
 // The component receives its own data and its index in the sections array
@@ -11,21 +11,14 @@ interface StorySectionEditorProps {
     enabled: boolean;
     required: boolean;
     collapsed: boolean;
-    props: {
-      title?: string;
-      message?: string;
-    };
+    props: {};
   };
   sectionIndex: number;
 }
 
 export function StorySectionEditor({ sectionData, sectionIndex }: StorySectionEditorProps) {
-  // Get the 'updatePageSectionField' action from the central Zustand store
-  const { updatePageSectionField } = useCampaignEditorStore();
-  
-  // We need to get the current page slug from the URL params
-  const params = useParams();
-  const pageSlug = params.pageSlug as string;
+  // Get the 'updateSectionField' action from the central Zustand store
+  const { updateSectionField } = useWebsiteEditorStore();
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
@@ -35,7 +28,7 @@ export function StorySectionEditor({ sectionData, sectionIndex }: StorySectionEd
           <div className="flex items-center gap-3">
             <div>
               <h3 className="font-semibold text-gray-900">Story Section</h3>
-              <p className="text-xs text-gray-500">Share your campaign story and message</p>
+              <p className="text-xs text-gray-500">Share your organization's story</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -43,23 +36,18 @@ export function StorySectionEditor({ sectionData, sectionIndex }: StorySectionEd
               <ToggleSwitch
                 label=""
                 checked={sectionData.enabled}
-                onChange={(isEnabled) => updatePageSectionField(pageSlug, sectionIndex, 'enabled', isEnabled)}
+                onChange={(isEnabled) => updateSectionField(sectionIndex, 'enabled', isEnabled)}
               />
             )}
             {sectionData.enabled && (
               <button
-                onClick={() => updatePageSectionField(pageSlug, sectionIndex, 'collapsed', !sectionData.collapsed)}
+                onClick={() => updateSectionField(sectionIndex, 'collapsed', !sectionData.collapsed)}
                 className="p-2 hover:bg-white/50 rounded-lg transition-all duration-200 group"
                 aria-label={sectionData.collapsed ? 'Expand section' : 'Collapse section'}
               >
-                <svg
-                  className={`w-4 h-4 text-gray-600 transition-transform duration-200 group-hover:text-gray-900 ${sectionData.collapsed ? 'rotate-0' : 'rotate-180'}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-600 transition-transform duration-200 group-hover:text-gray-900 cursor-pointer ${sectionData.collapsed ? 'rotate-0' : 'rotate-180'}`}
+                />
               </button>
             )}
           </div>
@@ -73,13 +61,12 @@ export function StorySectionEditor({ sectionData, sectionIndex }: StorySectionEd
             <CompactInput
               label="Title"
               value={sectionData.props.title || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.title', e.target.value)}
+              onChange={(e) => updateSectionField(sectionIndex, 'props.title', e.target.value)}
             />
             <CompactTextArea
-              label="Message"
-              value={sectionData.props.message || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.message', e.target.value)}
-              rows={6}
+              label="Text"
+              value={sectionData.props.text || ''}
+              onChange={(e) => updateSectionField(sectionIndex, 'props.text', e.target.value)}
             />
           </div>
         </div>

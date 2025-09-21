@@ -21,9 +21,14 @@ export default function CRMLayout({
 
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login');
-    }
+    // Add a small delay to prevent race conditions
+    const timeoutId = setTimeout(() => {
+      if (!isLoading && !isAuthenticated) {
+        router.push('/login');
+      }
+    }, 200);
+
+    return () => clearTimeout(timeoutId);
   }, [isAuthenticated, isLoading, router]);
 
   // Show loading state while checking authentication

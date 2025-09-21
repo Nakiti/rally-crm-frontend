@@ -13,23 +13,27 @@ export interface BaseWebsiteSection {
 // Section-specific prop interfaces
 export interface HeroSectionProps {
   headline: string;
-  buttonText: string;
+  message: string;
 }
 
 export interface MainSectionProps {
   title: string;
+  text: string
 }
 
 export interface AboutSectionProps {
   title: string;
+  text: string;
 }
 
 export interface ImpactSectionProps {
   title: string;
+  text: string
 }
 
 export interface FeaturedSectionProps {
   title: string;
+  text: string
 }
 
 export interface BannerSectionProps {
@@ -74,62 +78,62 @@ export interface WebsiteSection extends BaseWebsiteSection {
 // Specific section interfaces
 export interface HeroSection extends BaseWebsiteSection {
   type: 'hero';
-  required: true;
-  collapsed: false;
-  props: HeroSectionProps;
+  required: boolean;
+  collapsed: boolean;
+  props: object;
 }
 
 export interface MainSection extends BaseWebsiteSection {
   type: 'main';
-  required: true;
-  collapsed: false;
-  props: MainSectionProps;
+  required: boolean;
+  collapsed: boolean;
+  props: object;
 }
 
 export interface AboutSection extends BaseWebsiteSection {
   type: 'about';
-  required: true;
-  collapsed: false;
-  props: AboutSectionProps;
+  required: boolean;
+  collapsed: boolean;
+  props: object;
 }
 
 export interface ImpactSection extends BaseWebsiteSection {
   type: 'impact';
-  required: true;
-  collapsed: false;
-  props: ImpactSectionProps;
+  required: boolean;
+  collapsed: boolean;
+  props: object;
 }
 
 export interface FeaturedSection extends BaseWebsiteSection {
   type: 'featured';
-  required: true;
-  collapsed: false;
-  props: FeaturedSectionProps;
+  required: boolean;
+  collapsed: boolean;
+  props: object;
 }
 
 export interface BannerSection extends BaseWebsiteSection {
   type: 'banner';
-  props: BannerSectionProps;
+  props: object;
 }
 
 export interface StorySection extends BaseWebsiteSection {
   type: 'story';
-  props: StorySectionProps;
+  props: object;
 }
 
 export interface WhatSection extends BaseWebsiteSection {
   type: 'what';
-  props: WhatSectionProps;
+  props: object;
 }
 
 export interface WhySection extends BaseWebsiteSection {
   type: 'why';
-  props: WhySectionProps;
+  props: object;
 }
 
 export interface TeamSection extends BaseWebsiteSection {
   type: 'team';
-  props: TeamSectionProps;
+  props: object;
 }
 
 // Union type for all website sections
@@ -165,59 +169,69 @@ export const websiteSectionDefaults: WebsiteSectionDefaults = {
         enabled: true, 
         required: true, 
         collapsed: false, 
-        props: { headline: 'Your Campaign Title', buttonText: 'Donate Now' } 
+        props: { bannerImage: '' } 
     },
     main:  { 
         type: 'main', 
         enabled: true, 
-        required: true, 
+        required: false, 
         collapsed: false, 
-        props: { title: 'Our Story' } 
+        props: {  } 
     },
     about:  { 
         type: 'about', 
         enabled: true, 
-        required: true, 
+        required: false, 
         collapsed: false, 
-        props: { title: 'Our Story' } 
+        props: { } 
     },
     impact:  { 
         type: 'impact', 
         enabled: true, 
-        required: true, 
+        required: false, 
         collapsed: false, 
-        props: { title: 'Our Story' } 
+        props: { } 
     },
     featured:  { 
         type: 'featured', 
         enabled: true, 
-        required: true, 
+        required: false, 
         collapsed: false, 
-        props: { title: 'Our Story' } 
+        props: {  } 
     },
     banner: { 
         type: 'banner', 
         enabled: true, 
-        props: { headline: "Donate!", message: "Your Support is Greatly Appreciated" } 
+        required: true,
+        collapsed: false,
+        props: { bannerImage: '' } 
     },
     story:  { 
         type: 'story', 
-        enabled: true, 
+        enabled: true,
+        required: true,
+        collapsed: false, 
         props: {} 
     },
     what:  { 
         type: 'what', 
         enabled: true, 
+        required: false,
+        collapsed: true,
         props: {} 
     },
     why:  { 
         type: 'why', 
         enabled: true, 
+        required: false,
+        collapsed: true,
         props: {} 
     },
     team:  { 
         type: 'team', 
         enabled: true, 
+        required: false,
+        collapsed: true,
         props: {} 
     },
 }
