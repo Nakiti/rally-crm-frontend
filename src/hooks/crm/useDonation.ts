@@ -24,3 +24,15 @@ export const useGetDonationsByCampaign = (campaignId: string) => {
         enabled: !!campaignId,
     })
 }
+
+/**
+ * Hook to fetch recent donations for the dashboard
+ * @param limit - Maximum number of donations to return (default: 5)
+ * @returns React Query result with recent donations data
+ */
+export const useGetRecentDonations = (limit: number = 5) => {
+    return useQuery({
+        queryKey: ['crm', 'donations', 'recent', limit],
+        queryFn: () => donationService.getRecentDonations(limit),
+    });
+};

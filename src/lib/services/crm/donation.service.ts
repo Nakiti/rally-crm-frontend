@@ -19,3 +19,23 @@ export const getDonationById = async (id: string): Promise<Donation> => {
     const response = await apiClient.get(`/crm/donations/${id}`);
     return response.data.data; // Backend wraps in { success: true, data: result }
 };
+
+export interface RecentDonation {
+    id: string;
+    donorName: string;
+    campaignName: string;
+    amount: number;
+    donatedAt: string; // ISO date string
+}
+
+/**
+ * Fetches recent donations for the organization.
+ * @param limit - Maximum number of donations to return (default: 5)
+ * @returns Array of recent donations
+ */
+export const getRecentDonations = async (limit: number = 5): Promise<RecentDonation[]> => {
+    const response = await apiClient.get('/crm/donations/recent', { 
+        params: { limit } 
+    });
+    return response.data; // Backend returns array directly
+};

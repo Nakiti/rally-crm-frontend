@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { NavigationSidebarProps } from "../../app/(crm)/campaigns/[id]/editor/details/types";
+import type { NavigationSidebarProps } from "../../app/admin/campaigns/[id]/editor/details/types";
 
 export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
   campaignId,

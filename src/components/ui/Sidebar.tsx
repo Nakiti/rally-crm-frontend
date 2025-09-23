@@ -75,7 +75,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <>
                 <span className="ml-3 flex-1">{item.name}</span>
                 {item.badge && (
-                  <span className="ml-2 px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                  <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
                     {item.badge}
                   </span>
                 )}

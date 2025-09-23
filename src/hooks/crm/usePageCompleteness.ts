@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useWebsiteEditorStore } from '@/stores/crm/useWebsiteEditorStore';
-import { sectionValidation } from '@/config/sectionValidation.config';
+import { websiteSectionValidation } from '@/config/websiteSectionValidation.config';
 
 /**
  * A custom hook that calculates the "completeness" of the page currently
@@ -25,7 +25,7 @@ export const usePageCompleteness = () => {
 
     for (const section of enabledSections) {
       // Get the validation rules for this section type.
-      const rules = sectionValidation[section.type];
+      const rules = websiteSectionValidation[section.type];
       if (!rules) continue; // No rules for this section, so it's considered complete.
 
       let isSectionComplete = true;

@@ -5,6 +5,7 @@ export interface OrganizationPage {
     organizationId: string;
     pageType: PageType;
     contentConfig: object | null;
+    isPublished: boolean;
     createdAt: string;
     updatedAt: string;
 }

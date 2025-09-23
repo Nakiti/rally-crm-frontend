@@ -13,12 +13,12 @@ interface ButtonsSectionEditorProps {
     required: boolean;
     collapsed: boolean;
     props: {
-      buttonOne?: string;
-      buttonTwo?: string;
-      buttonThree?: string;
-      buttonFour?: string;
-      buttonFive?: string;
-      buttonSix?: string;
+      button1?: string;
+      button2?: string;
+      button3?: string;
+      button4?: string;
+      button5?: string;
+      button6?: string;
     };
   };
   sectionIndex: number;
@@ -72,33 +72,33 @@ export function ButtonsSectionEditor({ sectionData, sectionIndex }: ButtonsSecti
           <div className="grid gap-4">
             <CompactInput
               label="Button One"
-              value={sectionData.props.buttonOne || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.buttonOne', e.target.value)}
+              value={sectionData.props.button1 || ''}
+              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.button1', e.target.value)}
             />
             <CompactInput
               label="Button Two"
-              value={sectionData.props.buttonTwo || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.buttonTwo', e.target.value)}
+              value={sectionData.props.button2 || ''}
+              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.button2', e.target.value)}
             />
             <CompactInput
               label="Button Three"
-              value={sectionData.props.buttonThree || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.buttonThree', e.target.value)}
+              value={sectionData.props.button3 || ''}
+              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.button3', e.target.value)}
             /> 
             <CompactInput
               label="Button Four"
-              value={sectionData.props.buttonFour || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.buttonFour', e.target.value)}
+              value={sectionData.props.button4 || ''}
+              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.button4', e.target.value)}
             />            
             <CompactInput
               label="Button Five"
-              value={sectionData.props.buttonFive || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.buttonFive', e.target.value)}
+              value={sectionData.props.button5 || ''}
+              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.button5', e.target.value)}
             />
             <CompactInput
               label="Button Six"
-              value={sectionData.props.buttonSix || ''}
-              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.buttonSix', e.target.value)}
+              value={sectionData.props.button6 || ''}
+              onChange={(e) => updatePageSectionField(pageSlug, sectionIndex, 'props.button6', e.target.value)}
             />
           </div>
         </div>

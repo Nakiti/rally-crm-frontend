@@ -1,4 +1,4 @@
-import type { Campaign, CreateCampaignData, UpdateCampaignData, UpdatePageConfigData, UpdateCampaignDesignationsData, UpdateCampaignDesignationsResponse, UpdateCampaignQuestionsData, UpdateCampaignQuestionsResponse, CampaignSettings } from "@/lib/types";
+import type { Campaign, CreateCampaignData, UpdateCampaignData, UpdatePageConfigData, UpdateCampaignDesignationsData, UpdateCampaignDesignationsResponse, UpdateCampaignQuestionsData, UpdateCampaignQuestionsResponse, CampaignSettings, PublishCampaignData } from "@/lib/types";
 import apiClient from "../../apiClient"
 
 /**
@@ -104,4 +104,38 @@ export const updateCampaignQuestions = async (id: string, data: UpdateCampaignQu
 export const updateCampaignSettings = async (id: string, data: CampaignSettings): Promise<Campaign> => {
     const response = await apiClient.patch(`/crm/campaigns/${id}/settings`, data);
     return response.data.data;
+};
+
+/**
+ * Publishes a campaign with validation.
+ * @param id - The ID of the campaign to publish.
+ * @param data - The page configuration data for publishing.
+ * @returns The published campaign.
+ */
+export const publishCampaign = async (id: string, data: PublishCampaignData): Promise<Campaign> => {
+    const response = await apiClient.patch(`/crm/campaigns/${id}/publish`, data);
+    return response.data.data;
+};
+
+export interface TopCampaign {
+    id: string;
+    name: string;
+    raised: number;
+    goal: number | null;
+    donors: number;
+}
+
+export type CampaignPeriod = 'week' | 'month' | 'year';
+
+/**
+ * Fetches top-performing campaigns for the organization.
+ * @param period - Time period for the stats (week, month, year)
+ * @param limit - Maximum number of campaigns to return (default: 3)
+ * @returns Array of top campaigns with performance metrics
+ */
+export const getTopCampaigns = async (period: CampaignPeriod = 'month', limit: number = 3): Promise<TopCampaign[]> => {
+    const response = await apiClient.get('/crm/campaigns/top', { 
+        params: { period, limit } 
+    });
+    return response.data; // Backend returns array directly
 };

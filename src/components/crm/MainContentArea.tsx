@@ -1,6 +1,6 @@
 "use client";
 
-import type { MainContentAreaProps } from "../../app/(crm)/campaigns/[id]/editor/details/types";
+import type { MainContentAreaProps } from "../../app/admin/campaigns/[id]/editor/details/types";
 
 export const MainContentArea: React.FC<MainContentAreaProps> = ({
   children,

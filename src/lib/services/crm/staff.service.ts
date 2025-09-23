@@ -1,6 +1,7 @@
 import apiClient from "@/lib/apiClient";
 import type { 
   StaffMember, 
+  StaffMemberInfo,
   InviteStaffData, 
   UpdateStaffRoleData 
 } from "@/lib/types";
@@ -9,7 +10,7 @@ import type {
  * Fetches all staff members for the authenticated user's organization.
  * @returns Array of staff members.
  */
-export const getStaffForOrganization = async (): Promise<StaffMember[]> => {
+export const getStaffForOrganization = async (): Promise<StaffMemberInfo[]> => {
   const response = await apiClient.get('/crm/staff');
   return response.data.data;
 };

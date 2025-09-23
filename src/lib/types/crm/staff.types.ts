@@ -9,6 +9,17 @@ export interface StaffAccount {
   updatedAt: string;
 }
 
+// Backend returns this flattened structure
+export interface StaffMemberInfo {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: StaffRole;
+  joinedAt: string;
+}
+
+// Legacy nested structure (keeping for compatibility)
 export interface StaffMember {
   staffAccountId: string;
   organizationId: string;

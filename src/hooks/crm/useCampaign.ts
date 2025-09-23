@@ -166,3 +166,34 @@ export const useUpdateCampaignSettings = (id: string) => {
       },
     });
 };
+
+/**
+ * A mutation hook for publishing a campaign with validation.
+ */
+export const usePublishCampaign = (id: string) => {
+    const queryClient = useQueryClient();
+  
+    return useMutation({
+      mutationFn: (data: import("@/lib/types").PublishCampaignData) => 
+        campaignService.publishCampaign(id, data),
+      onSuccess: (publishedCampaign) => {
+        // Update the campaign data in the cache
+        queryClient.setQueryData(['crm', 'campaigns', id], publishedCampaign);
+        // Also invalidate the campaigns list to reflect the published status
+        queryClient.invalidateQueries({ queryKey: ['crm', 'campaigns'] });
+      },
+    });
+};
+
+/**
+ * Hook to fetch top-performing campaigns for the dashboard
+ * @param period - Time period for the stats (week, month, year)
+ * @param limit - Maximum number of campaigns to return (default: 3)
+ * @returns React Query result with top campaigns data
+ */
+export const useGetTopCampaigns = (period: import("@/lib/services/crm/campaign.service").CampaignPeriod = 'month', limit: number = 3) => {
+    return useQuery({
+        queryKey: ['crm', 'campaigns', 'top', period, limit],
+        queryFn: () => campaignService.getTopCampaigns(period, limit),
+    });
+};

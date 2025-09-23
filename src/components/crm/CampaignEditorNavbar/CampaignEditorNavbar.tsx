@@ -8,16 +8,9 @@ import PagesDropdown from './PagesDropdown';
 
 const CampaignEditorNavbar: React.FC<CampaignEditorNavbarProps> = ({
   campaignId,
-  organizationId,
   detailsLink,
   pageLinks,
-  onPublish,
-  onSave,
-  onDeactivate,
   status,
-  hasUnsavedChanges = false,
-  isPublishing = false,
-  isSaving = false, 
   campaignType = "crowdfunding",
   campaignDetails,
 }) => {
@@ -42,15 +35,7 @@ const CampaignEditorNavbar: React.FC<CampaignEditorNavbarProps> = ({
           status={status}
         />
 
-        <ActionButtons
-          status={status}
-          hasUnsavedChanges={hasUnsavedChanges}
-          isPublishing={isPublishing}
-          isSaving={isSaving}
-          onSave={onSave}
-          onPublish={onPublish}
-          onDeactivate={onDeactivate}
-        />
+        <ActionButtons />
       </div>
 
       <NavigationTabs

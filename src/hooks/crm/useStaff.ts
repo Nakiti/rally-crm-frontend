@@ -2,14 +2,15 @@ import * as staffService from "@/lib/services/crm/staff.service";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { 
   InviteStaffData, 
-  UpdateStaffRoleData 
+  UpdateStaffRoleData,
+  StaffMemberInfo 
 } from "@/lib/types";
 
 /**
  * Hook to fetch all staff members for the organization.
  */
 export const useGetStaffForOrganization = () => {
-  return useQuery({
+  return useQuery<StaffMemberInfo[]>({
     queryKey: ['crm', 'staff'],
     queryFn: staffService.getStaffForOrganization,
   });

@@ -10,16 +10,9 @@ export interface CampaignDetails {
 
 export interface CampaignEditorNavbarProps {
   campaignId: string;
-  organizationId: string;
   detailsLink: string;
   pageLinks: PageLink[];
-  onPublish: () => void;
-  onSave: () => void;
-  onDeactivate: () => void;
   status?: string;
-  hasUnsavedChanges?: boolean;
-  isPublishing?: boolean;
-  isSaving?: boolean;
   campaignType?: string;
   campaignDetails?: CampaignDetails;
 }

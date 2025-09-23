@@ -25,7 +25,7 @@ export const createSettingsCards = (organizationId: string): SettingsCard[] => [
   {
     title: "Users",
     description: "Add and manage users that are a part of your organization",
-    href: `/settings/users`,
+    href: `/settings/staff`,
     icon: <Users className="w-6 h-6 text-green-600" />
   },
   {
@@ -43,7 +43,7 @@ export const createSettingsCards = (organizationId: string): SettingsCard[] => [
   {
     title: "Payment Settings",
     description: "Configure Stripe payments and manage your organization's payment processing",
-    href: `/settings/payments`,
+    href: `/settings/payment`,
     icon: <CreditCard className="w-6 h-6 text-indigo-600" />
   }
 ];

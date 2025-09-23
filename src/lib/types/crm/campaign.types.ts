@@ -60,6 +60,11 @@ export interface UpdatePageConfigData {
     pageConfig: object;
 }
 
+// Define the shape of the data for publishing a campaign
+export interface PublishCampaignData {
+    pageConfig: object;
+}
+
 // Define the shape of the data for updating campaign designations
 export interface UpdateCampaignDesignationsData {
     designationIds: string[];

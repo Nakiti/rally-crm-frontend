@@ -41,9 +41,9 @@ const Table = <T extends { id: any }>({ data, columns, sortConfig, onSort, onRow
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {data.length > 0 ? (
-            data.map((row) => (
+            data.map((row, index) => (
               <tr
-                key={row.id}
+                key={index}
                 className={`hover:bg-gray-50 transition-colors duration-150 ${onRowClick ? 'cursor-pointer' : ''}`}
                 onClick={() => onRowClick?.(row)}
               >

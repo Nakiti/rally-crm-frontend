@@ -12,17 +12,14 @@ export const useDonorSignUp = () => {
   return useMutation({
     mutationFn: donorAuthService.signUp,
     onSuccess: (data) => {
-      // Store the donor JWT token for authenticated requests
-      localStorage.setItem('donor_jwt', data.token);
-      
-      // Store donor info for UI purposes
-      localStorage.setItem('donor_info', JSON.stringify(data.donor));
+      // Donor info is returned in the response, token is set as HTTP-only cookie
+      console.log('Donor signup successful:', data);
     },
   });
 };
 
 /**
- * Hook to authenticate a donor and get JWT token.
+ * Hook to authenticate a donor.
  */
 export const useDonorLogIn = () => {
   const queryClient = useQueryClient();
@@ -30,11 +27,8 @@ export const useDonorLogIn = () => {
   return useMutation({
     mutationFn: donorAuthService.logIn,
     onSuccess: (data) => {
-      // Store the donor JWT token for authenticated requests
-      localStorage.setItem('donor_jwt', data.token);
-      
-      // Store donor info for UI purposes
-      localStorage.setItem('donor_info', JSON.stringify(data.donor));
+      // Donor info is returned in the response, token is set as HTTP-only cookie
+      console.log('Donor login successful:', data);
       
       // Invalidate and refetch donor-related data
       queryClient.invalidateQueries({ queryKey: ['public', 'donor'] });
@@ -49,11 +43,7 @@ export const useDonorLogOut = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => {
-      // Clear all donor authentication tokens and info
-      localStorage.removeItem('donor_jwt');
-      localStorage.removeItem('donor_info');
-    },
+    mutationFn: donorAuthService.logOut,
     onSuccess: () => {
       // Clear all donor-related cached data
       queryClient.removeQueries({ queryKey: ['public', 'donor'] });

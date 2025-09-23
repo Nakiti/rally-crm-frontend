@@ -118,6 +118,8 @@ export const campaignSectionDefaults: CampaignSectionDefaults = {
   donationHeader: {
     type: 'donationHeader',
     enabled: true,
+    required: true,
+    collapsed: true,
     props: {
       headline: "Donate!",
       message: "Your Support is Greatly Appreciated"
@@ -126,13 +128,22 @@ export const campaignSectionDefaults: CampaignSectionDefaults = {
   donationButtons: {
     type: 'donationButtons',
     enabled: true,
+    required: true,
+    collapsed: true,
     props: {
-      suggestedAmounts: [25, 50, 100]
+      button1: 10,
+      button2: 25,
+      button3: 50,
+      button4: 100,
+      button5: 150,
+      button6: 200
     }
   },
   thankYouHeader: {
     type: 'thankYouHeader',
     enabled: true,
+    required: true,
+    collapsed: true,
     props: {
       headline: "Thank You",
       message: "Your Support is Greatly Appreciated!"
