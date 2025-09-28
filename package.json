@@ -2,8 +2,9 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node server.js --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint"

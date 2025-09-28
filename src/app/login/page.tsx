@@ -42,7 +42,7 @@ export default function StaffLoginPage() {
         const { user } = response;
         // Update auth state with user data
         login(user);
-        router.push('/home');
+        router.push('/admin/home');
       },
       onError: (error: any) => {
         console.error('Login error:', error);
@@ -54,7 +54,7 @@ export default function StaffLoginPage() {
   // Redirect if already authenticated
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/home');
+      router.push('/admin/home');
     }
   }, [isAuthenticated, router]);
 
